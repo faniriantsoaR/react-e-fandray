@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
+import ChatService from '../services/ChatService';
 
 const useStyles = makeStyles(theme => ({
     messageArea: {
@@ -32,10 +33,14 @@ const useStyles = makeStyles(theme => ({
             textAlign: "right"
         }
     }
-  }));
+}));
 
-export default function Chat(){
+const chatService = new ChatService() ;
+
+export default function Chat(props:{destId:number}){
     const classes = useStyles() ;
+    chatService.loadMessages(props.destId) ;
+
     return (
         <div>
             <List className={classes.messageArea}>

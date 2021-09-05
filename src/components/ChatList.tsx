@@ -78,10 +78,10 @@ export default function ChatList() {
         <Tab className={classes.tab} label="Don Diablo" {...a11yProps(1)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <Chat />
+        <Chat destId={1} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Chat />
+        <Chat destId={2} />
       </TabPanel>
     </div>
   );
