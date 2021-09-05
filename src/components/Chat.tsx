@@ -11,7 +11,7 @@ import SendIcon from '@material-ui/icons/Send';
 
 const useStyles = makeStyles(theme => ({
     messageArea: {
-      height: '70vh',
+      height: '80vh',
       overflowY: 'auto',
       "&>*": {
           borderRadius: "5px",
