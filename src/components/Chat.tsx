@@ -27,8 +27,8 @@ const useStyles = makeStyles(theme => ({
     textByMe:{
         backgroundColor: theme.palette.primary.light,
         float: "right",
-        "& span": {
-            color: "#fff"
+        "& span, & p": {
+            color: "#fff!important"
         },
         "& .MuiListItemText-root": {
             textAlign: "right"
@@ -53,7 +53,7 @@ export default function Chat(props:{destId:number}){
         <div>
             <List className={classes.messageArea}>
             {
-                messages.map((item:any) => {
+                messages.slice(0).map((item:any) => {
                     var classPers = {} ;
                     if(item.auteurId === ConnectedService.getConnectedId()){
                         classPers = {className: classes.textByMe} ;

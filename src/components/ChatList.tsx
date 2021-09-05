@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Chat from './Chat' ;
+import UserService from '../services/UserService' ;
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,7 +53,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRight: `1px solid ${theme.palette.divider}`,
   },
   tab: {
-    textTransform: "none"
+    textTransform: "none",
+    "&>*":{
+      alignItems: "flex-start"
+    }
   }
 }));
 
@@ -64,6 +68,16 @@ export default function ChatList() {
     setValue(newValue);
   };
 
+  const [users, setUsers] = useState<any[]>([]) ;
+
+  useEffect(() => { 
+    const userService = new UserService() ;
+    userService.loadOtherUser().then((data) => {
+      console.log(data) ;
+      setUsers((data as any[]))
+    }) ;
+  }, []) ;
+
   return (
     <div className={classes.root}>
       <Tabs
@@ -74,7 +88,9 @@ export default function ChatList() {
         aria-label="Vertical tabs example"
         className={classes.tabs}
       >
-        <Tab className={classes.tab} label="Don Diablo" {...a11yProps(0)} />
+        {
+        users.slice(0).map((item:any) => <Tab className={classes.tab} key={item.id} label={item.prenom+" "+item.nom} {...a11yProps(0)} />)
+        }
       </Tabs>
       <TabPanel value={value} index={0}>
         <Chat destId={2} />
