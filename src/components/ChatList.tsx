@@ -24,7 +24,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <Box p={3} component="div">
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -74,13 +74,9 @@ export default function ChatList() {
         aria-label="Vertical tabs example"
         className={classes.tabs}
       >
-        <Tab className={classes.tab} label="Andrianiaina Faniriantsoa" {...a11yProps(0)} />
-        <Tab className={classes.tab} label="Don Diablo" {...a11yProps(1)} />
+        <Tab className={classes.tab} label="Don Diablo" {...a11yProps(0)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <Chat destId={1} />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
         <Chat destId={2} />
       </TabPanel>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
@@ -9,6 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import ChatService from '../services/ChatService';
+import ConnectedService from '../services/ConnectedService';
 
 const useStyles = makeStyles(theme => ({
     messageArea: {
@@ -35,45 +36,42 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const chatService = new ChatService() ;
-
 export default function Chat(props:{destId:number}){
+    const [messages, setMessages] = useState<any[]>([]) ;
     const classes = useStyles() ;
-    chatService.loadMessages(props.destId) ;
+
+    useEffect(() => { 
+        const chatService = new ChatService() ;
+        chatService.loadMessages(props.destId)
+            .then((data) => {
+                console.log(data) ;
+                setMessages((data as any[])) ;
+        }) ;
+    }, [props.destId]) ;
 
     return (
         <div>
             <List className={classes.messageArea}>
-                <ListItem key="1" className={classes.textByMe}>
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <ListItemText primary="De aona Don ah ?"></ListItemText>
+            {
+                messages.map((item:any) => {
+                    var classPers = {} ;
+                    if(item.auteurId === ConnectedService.getConnectedId()){
+                        classPers = {className: classes.textByMe} ;
+                    }
+
+                    return <ListItem key={item.id} {...classPers}>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <ListItemText primary={item.contenu}></ListItemText>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <ListItemText secondary={item.temps}></ListItemText>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12}>
-                            <ListItemText secondary="09:30"></ListItemText>
-                        </Grid>
-                    </Grid>
-                </ListItem>
-                <ListItem key="2">
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <ListItemText primary="Salut anh, ça va tsara ka"></ListItemText>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <ListItemText secondary="09:31"></ListItemText>
-                        </Grid>
-                    </Grid>
-                </ListItem>
-                <ListItem key="3" className={classes.textByMe}>
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <ListItemText primary="Tsara zany bro, Tiako le hira vaovao anareo"></ListItemText>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <ListItemText secondary="10:30"></ListItemText>
-                        </Grid>
-                    </Grid>
-                </ListItem>
+                    </ListItem>
+                    
+                })
+            }
             </List>
             <Divider />
             <Grid container style={{padding: '20px', width: '100%'}}>

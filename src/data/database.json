@@ -4,19 +4,22 @@
             "id": 1,
             "contenu": "De aona Don ah ?",
             "temps": "09:30",
-            "userId": 1
+            "auteurId": 1,
+            "destId": 2
         },
         {
             "id": 2,
             "contenu": "Salut anh, ça va tsara ka",
             "temps": "09:31",
-            "userId": 2
+            "auteurId": 2,
+            "destId": 1
         },
         {
             "id": 3,
             "contenu": "Tsara zany, Tiako le hira vaovao anareo",
             "temps": "10:30",
-            "userId": 1
+            "auteurId": 1,
+            "destId": 2
         }
     ],
     "membres": [
@@ -29,6 +32,11 @@
             "id": 2,
             "nom": "Diablo",
             "prenom": "Don"
+        },
+        {
+            "id": 3,
+            "nom": "Andrianiaina",
+            "prenom": "Faniriantsoa"
         }
     ]
 }
