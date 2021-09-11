@@ -2,7 +2,7 @@ import ConnectedService from "./ConnectedService";
 
 
 export default class UserService{
-    loadOtherUser(){
+    loadOtherUsers(){
         return new Promise(async function(resolve:any, reject: any){
             let result: any[] = [] ;
             const connected = ConnectedService.getConnectedId() ;
