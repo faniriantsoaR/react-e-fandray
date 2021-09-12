@@ -1,6 +1,8 @@
 import './App.css';
+import Header from './components/Header';
 import ChatList from './components/ChatList' ;
 import { createTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import { BrowserRouter } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -18,7 +20,10 @@ function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <div className="App">
-        <ChatList />
+        <BrowserRouter>
+          <Header />
+          <ChatList />
+        </BrowserRouter>
       </div>
     </MuiThemeProvider>
     

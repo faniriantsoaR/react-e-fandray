@@ -2,7 +2,7 @@ import React, {useState,useEffect} from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Chat from './Chat' ;
 import UserService from '../services/UserService' ;
-import { BrowserRouter, NavLink, Route } from 'react-router-dom';
+import { NavLink, Route, Switch } from 'react-router-dom';
 import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
 
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "#1c1c1c",
     boxShadow: "2px 0 4px rgba(0, 0, 0, 0.3)",
     position: "fixed",
-    top: "0",
+    top: "64px",
     left: "0",
     bottom: "0",
     width: "250px",
@@ -49,6 +49,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       color: theme.palette.getContrastText(theme.palette.primary.light),
       fontWeight: "bold!important"
     }
+  },
+  customAvatar: {
+    backgroundColor: "#fff"
   }
 }));
 
@@ -67,7 +70,7 @@ export default function ChatList() {
 
   return (
     <div className={classes.root}>
-      <BrowserRouter>
+      
         <div className={classes.chatListContainer}>
           <Grid className={classes.usersContainer} container direction="column" alignItems="stretch">
           {
@@ -75,7 +78,7 @@ export default function ChatList() {
             <Grid item key={item.id}>
               <NavLink className={classes.userLink} activeClassName={classes.userLinkActive} to={"/chat/"+item.id}>
                 <ListItem>
-                  <ListItemAvatar children={<Avatar src={process.env.PUBLIC_URL+"/images/1.jpg"} />} />
+                  <ListItemAvatar children={<Avatar className={classes.customAvatar} src={process.env.PUBLIC_URL+"/"+item.avatar} />} />
                   <ListItemText primary={item.prenom+" "+item.nom} />
                 </ListItem>
               </NavLink>
@@ -83,9 +86,11 @@ export default function ChatList() {
           )
           }
           </Grid>
-          <Route path="/chat/:id"><Chat /></Route>
+          <Switch>
+            <Route path="/chat/:id"><Chat /></Route>
+            <Route path="/:id"><Chat /></Route>
+          </Switch>
         </div>
-      </BrowserRouter>
     </div>
   );
 }

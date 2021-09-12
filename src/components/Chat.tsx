@@ -49,7 +49,7 @@ interface ChatParams{
 export default function Chat(){
     const [messages, setMessages] = useState<any[]>([]) ;
     const classes = useStyles() ;
-    const { id } = useParams<ChatParams>() ;
+    var { id } = useParams<ChatParams>() ;
     const [loaded, setLoaded] = useState(false) ;
     const [error, setError] = useState(false) ;
     const messageField = createRef<HTMLInputElement>() ;
@@ -60,6 +60,7 @@ export default function Chat(){
             alert("Une erreur s'est produite lors de l'envoi de votre message, veuillez réessayer.") ;
             return ;
         }
+        
         const contenu = messageField.current.value ;
         chatService.addMessage(id, contenu).then((data:any) => {
             const updated = messages.slice(0) ;
@@ -89,7 +90,7 @@ export default function Chat(){
         const now = new Date() ;
         let res = pad2(heure) + ':' + pad2(minute) ;
         if(jour !== now.getUTCDay() || mois !== now.getUTCMonth()){
-            res = res+pad2(jour) + "/" + pad2(mois) ;
+            res = pad2(jour) + "/" + pad2(mois) + " - "+res ;
         }
 
         return res ;
@@ -103,6 +104,7 @@ export default function Chat(){
     }
 
     useEffect(() => {
+
         chatService.loadMessages(Number(id))
             .then((data: any) => {
                 setMessages((data as any[])) ;

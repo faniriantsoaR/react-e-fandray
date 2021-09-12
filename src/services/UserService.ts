@@ -16,4 +16,19 @@ export default class UserService{
             resolve(result) ;
         }) ;
     }
+
+    getConnectedUser(){
+        return new Promise(async function(resolve:any, reject: any){
+            let result: any[] = [] ;
+            const connected = ConnectedService.getConnectedId() ;
+
+            await fetch("http://localhost:3001/membres?id="+connected)
+            .then(response => response.json())
+            .then(json => {
+                result = json ;
+            });
+
+            resolve(result[0]) ;
+        }) ;
+    }
 }

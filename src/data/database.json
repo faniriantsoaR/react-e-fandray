@@ -26,17 +26,20 @@
     {
       "id": 1,
       "nom": "Sunshine",
-      "prenom": "Jane"
+      "prenom": "Jane",
+      "avatar": "images/1.jpg"
     },
     {
       "id": 2,
       "nom": "Diablo",
-      "prenom": "Don"
+      "prenom": "Don",
+      "avatar": "images/2.png"
     },
     {
       "id": 3,
       "nom": "Andrianiaina",
-      "prenom": "Faniriantsoa"
+      "prenom": "Faniriantsoa",
+      "avatar": "images/3.png"
     }
   ]
 }
