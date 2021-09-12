@@ -3,7 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Chat from './Chat' ;
 import UserService from '../services/UserService' ;
 import { NavLink, Route, Switch } from 'react-router-dom';
-import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
+import { Avatar, Box, Grid, ListItem, ListItemAvatar, ListItemText, Tooltip } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "#1c1c1c",
     boxShadow: "2px 0 4px rgba(0, 0, 0, 0.3)",
     position: "fixed",
-    top: "64px",
+    top: "72px",
     left: "0",
     bottom: "0",
     width: "250px",
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     boxSizing: "border-box",
     transitionDuration: "0.5s",
+    borderTop: "2px solid #4c4c4c",
     "&:hover": {
       backgroundColor: "#4c4c4c"
     },
@@ -44,9 +45,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   userLinkActive: {
-    backgroundColor: theme.palette.primary.light+"!important",
+    backgroundColor: theme.palette.secondary.main+"!important",
     "& *": {
-      color: theme.palette.getContrastText(theme.palette.primary.light),
+      color: theme.palette.getContrastText(theme.palette.secondary.light),
       fontWeight: "bold!important"
     }
   },
@@ -76,19 +77,24 @@ export default function ChatList() {
           {
           users.slice(0).map((item:any) => 
             <Grid item key={item.id}>
-              <NavLink className={classes.userLink} activeClassName={classes.userLinkActive} to={"/chat/"+item.id}>
-                <ListItem>
-                  <ListItemAvatar children={<Avatar className={classes.customAvatar} src={process.env.PUBLIC_URL+"/"+item.avatar} />} />
-                  <ListItemText primary={item.prenom+" "+item.nom} />
-                </ListItem>
-              </NavLink>
+              <Tooltip title={item.prenom+" "+item.nom} placement="right">
+                <NavLink className={classes.userLink} activeClassName={classes.userLinkActive} to={"/chat/"+item.id}>
+                  <ListItem>
+                    <ListItemAvatar children={<Avatar className={classes.customAvatar} src={process.env.PUBLIC_URL+"/"+item.avatar} />} />
+                    <ListItemText primary={item.prenom+" "+item.nom} />
+                  </ListItem>
+                </NavLink>
+              </Tooltip>
             </Grid>
           )
           }
           </Grid>
           <Switch>
-            <Route path="/chat/:id"><Chat /></Route>
-            <Route path="/:id"><Chat /></Route>
+            <Route path="/chat/:id" render={(props) => (
+              <Chat key={props.match.params.id} {...props} 
+            />)}
+            />
+            <Route><Box p={5} textAlign="center">Veuillez sélectionner une personne pour commencer une discussion.</Box></Route>
           </Switch>
         </div>
     </div>

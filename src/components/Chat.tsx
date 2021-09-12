@@ -11,11 +11,11 @@ import SendIcon from '@material-ui/icons/Send';
 import ChatService from '../services/ChatService';
 import ConnectedService from '../services/ConnectedService';
 import { useParams } from 'react-router';
-import { Typography } from '@material-ui/core';
+import { Typography, Box, TextareaAutosize } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     messageArea: {
-        height: '80vh',
+        height: '75vh',
         overflowY: 'auto',
         "&>*": {
             borderRadius: "1000px",
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
         }
     },
     textByMe:{
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: theme.palette.secondary.light,
         float: "right",
         "& span, & p": {
             color: "#fff!important"
@@ -46,6 +46,7 @@ interface ChatParams{
     id: any
 }
 
+
 export default function Chat(){
     const [messages, setMessages] = useState<any[]>([]) ;
     const classes = useStyles() ;
@@ -54,6 +55,7 @@ export default function Chat(){
     const [error, setError] = useState(false) ;
     const messageField = createRef<HTMLInputElement>() ;
     const chatService = new ChatService() ;
+    const [loadNew, setLoadNew] = useState(false) ;
 
     const sendMessage = () => {
         if(messageField == null || messageField.current == null){
@@ -63,14 +65,11 @@ export default function Chat(){
         
         const contenu = messageField.current.value ;
         chatService.addMessage(id, contenu).then((data:any) => {
-            const updated = messages.slice(0) ;
-            updated.push(data) ;
             if(messageField != null && messageField.current != null){
                 messageField.current.value = "" ;
                 messageField.current.focus() ;
                 messageField.current.blur() ;
             }
-            setMessages(updated) ;
         }) ;
     }
 
@@ -104,12 +103,31 @@ export default function Chat(){
     }
 
     useEffect(() => {
+        console.log("setTimeout") ;
+        const timeOut = setTimeout(() => {
+            console.log("prepare load") ;
+            setLoadNew(!loadNew) ;
+        }, 1200) ;
 
+        return () => {
+            clearTimeout(timeOut) ;
+        }
+    }, [loadNew]) ;
+
+    useEffect(() => {
+        console.log("LOADDDDD") ;
+        chatService.loadNewMessages(Number(id), messages[messages.length - 1]?.id)
+            .then((data: any) => {
+                var updated = messages.slice(0).concat((data as any[])) ;
+                setMessages(updated) ;
+            }) ;
+    }, [loadNew]) ;
+
+    useEffect(() => {
         chatService.loadMessages(Number(id))
             .then((data: any) => {
                 setMessages((data as any[])) ;
                 setLoaded(true) ;
-                scrollDown() ;
             }).catch((error: any) => {
                 console.log(error) ;
                 setLoaded(true) ;
@@ -120,12 +138,17 @@ export default function Chat(){
     useEffect(scrollDown, [messages]) ;
 
     if(loaded && error){
-        return <div><Typography variant="body2">Une erreur s'est produite, veuillez réessayer s'il vous plaît.</Typography></div>
+        return <Box p={5} textAlign="center"><Typography variant="body1">Une erreur s'est produite, veuillez réessayer s'il vous plaît.</Typography></Box>
     }else if(!loaded){
-        return <div><Typography variant="body2">Chargement...</Typography></div>
+        return <Box p={5} textAlign="center"><Typography variant="body1">Chargement...</Typography></Box>
     }else{
+        let nomessage = null ;
+        if(messages.length === 0){
+            nomessage = (<Box px={5} pt={4} textAlign="center"><Typography variant="body1">Envoyer un message pour démarrer une discussion avec cette personne. </Typography></Box>) ;
+        }
         return (
             <div>
+                {nomessage}
                 <List id="messages" className={classes.messageArea}>
                 {
                     messages.slice(0).map((item:any) => {

@@ -2,19 +2,23 @@ import ConnectedService from "./ConnectedService";
 import axios from 'axios' ;
 
 export default class ChatService{
-    loadMessages(destId:number){
+    
+    loadMessages(destId:number, lastId?:number){
+        if(lastId === undefined)
+            lastId = 0 ;
+        lastId = lastId + 1 ;
         return new Promise(async function(resolve:any, reject: any){
             let result = [] ;
             let r1: any[] = [] ;
             let r2: any[] = [] ;
             const connected = ConnectedService.getConnectedId() ;
 
-            await fetch("http://localhost:3001/messages?destId="+destId+"&auteurId="+connected)
+            await fetch("http://localhost:3001/messages?id_gte="+lastId+"&id_lte="+Number.MAX_SAFE_INTEGER.toString()+"&destId="+destId+"&auteurId="+connected)
             .then(response => response.json())
             .then(json => {
                 r1 = json ;
             });
-            await fetch("http://localhost:3001/messages?auteurId="+destId+"&destId="+connected)
+            await fetch("http://localhost:3001/messages?id_gte="+lastId+"&id_lte="+Number.MAX_SAFE_INTEGER.toString()+"&auteurId="+destId+"&destId="+connected)
             .then(response => response.json())
             .then(json => {
                 r2 = json ;
@@ -28,6 +32,10 @@ export default class ChatService{
             console.log("result : ", result) ;
             resolve(result) ;
         }) ;
+    }
+
+    loadNewMessages(destId: number, lastId: number){
+        return this.loadMessages(destId, lastId) ;
     }
 
     addMessage(destId: number, contenu: string){

@@ -1,55 +1,49 @@
 import { AppBar, Button, makeStyles, Toolbar, Typography } from "@material-ui/core";
+import React from "react" ;
 import { useState } from "react";
+import InfoIcon from "@material-ui/icons/InfoRounded" ;
 import { Link as RouterLink } from "react-router-dom";
 import UserService from "../services/UserService";
 
 const useStyles = makeStyles(() => ({
     header: {
         backgroundColor: "primary",
-        paddingRight: "79px",
-        paddingLeft: "118px",
+        padding: "5px 20px",
         position: "sticky",
-        "@media (max-width: 900px)": {
-            paddingLeft: 0,
-        }
+        fontFamily: "Work Sans, sans-serif"
     },
-    menuBar: {
+    menu: {
         display: "flex",
         justifyContent: "space-between"
     },
     logo: {
       "&>*":{
-        fontFamily: "Work Sans, sans-serif",
         fontWeight: 600,
         color: "#FFFEFE",
         textAlign: "left",
         textDecoration: "none"
       }
     },
-    menuButton: {
-        fontFamily: "Open Sans, sans-serif",
-        fontWeight: 700,
-        size: "18px",
-        marginLeft: "25px",
+    link: {
+        fontWeight: 400,
+        size: "20px",
+        textTransform: "none"
     }
 })) ;
 
 const userService = new UserService() ;
 
-export default function Header() {
+export default function Header(props:{showInfo:any}) {
     const classes = useStyles() ;
     const [fullName, setFullName] = useState("") ;
 
-    const logo = (
-      <Typography className={classes.logo} variant="h5" component="h1">
-          <RouterLink to="/">E-Fandray</RouterLink>
-      </Typography>
-    );
 
     const getMenu = () => {
         return (
-            <Toolbar className={classes.menuBar}>
-                {logo}
+            <Toolbar className={classes.menu}>
+                <Typography className={classes.logo} variant="h5" component="h1">
+                  <RouterLink to="/">E-Fandray</RouterLink>
+              </Typography>
                 <div>{ getMenuButtons() }</div>
             </Toolbar>
         );
@@ -61,16 +55,20 @@ export default function Header() {
         })
         
         return (
-          <Button
+          <React.Fragment>
+            <Button
             {...{
               color: "inherit",
               to: "/chat/2",
               component: RouterLink,
-              className: classes.menuButton
+              className: classes.link
             }}
-          >
-            Connecté : <b>{fullName}</b>
-          </Button>
+            >
+              Connecté : <b>{fullName}</b>
+            </Button>
+            <Button color="inherit" className={classes.link} onClick={props.showInfo}><InfoIcon /></Button>
+          </React.Fragment>
+          
         );
     };
 
